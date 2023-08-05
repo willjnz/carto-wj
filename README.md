@@ -26,4 +26,9 @@ The user can do the following:
 - Change layers's fill color to be defined by a key attribute (revenue for retail_stores, population for sociodemographics)
 - Click on features to see a tooltip showing its attributes
 
-  
+  To run the application locally, complete the following steps:
+
+  1. clone the repository
+  2. install with npm or yarn
+  3. add an .env file to the root directory and add a REACT_APP_CARTO_accessToken and a REACT_APP_CARTO_apiBaseUrl to this file
+  4. run start with npm or yarn
