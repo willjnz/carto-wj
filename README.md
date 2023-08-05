@@ -26,7 +26,8 @@ The user can do the following:
 - Change layers's fill color to be defined by a key attribute (revenue for retail_stores, population for sociodemographics)
 - Click on features to see a tooltip showing its attributes
 
-  To run the application locally, complete the following steps:
+
+To run the application locally, complete the following steps:
 
   1. clone the repository
   2. install with npm or yarn
