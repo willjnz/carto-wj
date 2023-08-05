@@ -2,6 +2,8 @@
 # An application developed using Deck.gl for Carto
 
 It is written using React and Typescript. Please contact will.jones@hotmail.co.nz for any questions.
+
+It deploys here: https://carto-wj.netlify.app/
   
 
 It shows the following layers:
