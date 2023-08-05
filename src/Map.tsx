@@ -80,14 +80,38 @@ function Map(props: {
     connection: "carto_dw",
     source: "carto-demo-data.demo_tables.retail_stores",
     geoColumn: "geom",
+    getFillColor: retailStoresConfig.fillColor,
+    getLineColor: retailStoresConfig.lineColor,
+    getPointRadius: retailStoresConfig.radius,
+    getLineWidth: retailStoresConfig.lineWidth,
+    visible: retailStoresConfig.styleByAttribute ? false : true,
+  });
+  const socioDemographicsLayer = new CartoLayer({
+    ...basicLayerConfig,
+    id: "sociodemographics_usa_blockgroup",
+    name: "sociodemographics_usa_blockgroup",
+    type: MAP_TYPES.TILESET,
+    connection: "carto_dw",
+    data: "carto-demo-data.demo_tilesets.sociodemographics_usa_blockgroup",
+    getFillColor: socioDemographicsConfig.fillColor,
+    getLineColor: socioDemographicsConfig.lineColor,
+    getPointRadius: socioDemographicsConfig.radius,
+    getLineWidth: socioDemographicsConfig.lineWidth,
+    visible: socioDemographicsConfig.styleByAttribute ? false : true,
+  });
+  const retailStoresRampedLayer = new CartoLayer({
+    ...basicLayerConfig,
+    id: "retail_stores_ramped",
+    name: "retail_stores_ramped",
+    type: MAP_TYPES.TABLE,
+    connection: "carto_dw",
+    source: "carto-demo-data.demo_tables.retail_stores",
+    geoColumn: "geom",
     getFillColor: (feature: any) => {
-      // style by attribute or user selected color
-      if (retailStoresConfig.styleByAttribute) {
-        const revenue = feature.properties.revenue;
-        if (revenue > 1500000) return [255, 136, 0];
-        else if (revenue > 1100000) return [255, 175, 85];
-        else return [255, 215, 170];
-      } else return retailStoresConfig.fillColor;
+      const revenue = feature.properties.revenue;
+      if (revenue > 1500000) return [255, 136, 0];
+      else if (revenue > 1100000) return [255, 175, 85];
+      else return [255, 215, 170];
     },
     getLineColor: retailStoresConfig.lineColor,
     getPointRadius: retailStoresConfig.radius,
@@ -98,22 +122,20 @@ function Map(props: {
         retailStoresConfig.fillColor,
       ],
     },
+    visible: retailStoresConfig.styleByAttribute ? true : false,
   });
-  const socioDemographicsLayer = new CartoLayer({
+  const socioDemographicsRampedLayer = new CartoLayer({
     ...basicLayerConfig,
-    id: "sociodemographics_usa_blockgroup",
-    name: "sociodemographics_usa_blockgroup",
+    id: "sociodemographics_usa_blockgroup_ramped",
+    name: "sociodemographics_usa_blockgroup_ramped",
     type: MAP_TYPES.TILESET,
     connection: "carto_dw",
     data: "carto-demo-data.demo_tilesets.sociodemographics_usa_blockgroup",
     getFillColor: (feature: any) => {
-      // style by attribute or user selected color
-      if (socioDemographicsConfig.styleByAttribute) {
-        const population = feature.properties.total_pop;
-        if (population > 2000) return [255, 136, 0];
-        else if (population > 1000) return [255, 175, 85];
-        else return [255, 215, 170];
-      } else return socioDemographicsConfig.fillColor;
+      const population = feature.properties.total_pop;
+      if (population > 2000) return [255, 136, 0];
+      else if (population > 1000) return [255, 175, 85];
+      else return [255, 215, 170];
     },
     getLineColor: socioDemographicsConfig.lineColor,
     getPointRadius: socioDemographicsConfig.radius,
@@ -124,8 +146,14 @@ function Map(props: {
         socioDemographicsConfig.fillColor,
       ],
     },
+    visible: socioDemographicsConfig.styleByAttribute ? true : false,
   });
-  const layers = [socioDemographicsLayer, retailStoresLayer];
+  const layers = [
+    socioDemographicsLayer,
+    retailStoresLayer,
+    retailStoresRampedLayer,
+    socioDemographicsRampedLayer,
+  ];
 
   return (
     <div className="MapContainer">
