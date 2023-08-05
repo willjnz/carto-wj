@@ -1,5 +1,5 @@
 
-# An application developed using Deck.gl for Carto
+# An application developed using Deck.gl for Carto HR
 
 It is written using React and Typescript. Please contact will.jones@hotmail.co.nz for any questions.
 
