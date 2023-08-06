@@ -4,6 +4,7 @@ import "./App.css";
 import Map from "./Map";
 import {
   ILayerConfig,
+  ILayerMetadata,
   IVisualisationLimits,
   TLayerConfigDispatch,
 } from "./react-app-env";
@@ -96,7 +97,9 @@ function App() {
     return result;
   };
 
-  function Legend(props: { items: {color: string, value: number}[] }): JSX.Element {
+  function Legend(props: {
+    items: { color: string; value: number }[];
+  }): JSX.Element {
     const { items } = props;
     return (
       <div className="Legend">
@@ -109,6 +112,30 @@ function App() {
             <p className="LegendText">&gt;{li.value}</p>
           </div>
         ))}
+      </div>
+    );
+  }
+
+  function NumericInput(props: {
+    property: string;
+    layer: ILayerMetadata;
+  }): JSX.Element {
+    const { property, layer } = props;
+    const name = `${layer.name}${property}Input`;
+    return (
+      <div className="LayerControl">
+        <label htmlFor={name}>{camelCaseToTitleCase(property)}: </label>
+        <input
+          type="number"
+          id={name}
+          // @ts-ignore
+          value={layer.config[property]}
+          onChange={(e) =>
+            handleNumericChange(e, property, layer.config, layer.setter)
+          }
+          min={visualisationLimits.min}
+          max={visualisationLimits.max}
+        />
       </div>
     );
   }
@@ -133,39 +160,8 @@ function App() {
                 />
               </div>
             ))}
-            <div className="LayerControl">
-              <label htmlFor={`${layer.name}RadiusInput`}>Radius: </label>
-              <input
-                type="number"
-                id={`${layer.name}RadiusInput`}
-                value={layer.config.radius}
-                onChange={(e) =>
-                  handleNumericChange(e, "radius", layer.config, layer.setter)
-                }
-                min={visualisationLimits.min}
-                max={visualisationLimits.max}
-              />
-            </div>
-            <div className="LayerControl">
-              <label htmlFor={`${layer.name}LineWidthInput`}>
-                Line Width:{" "}
-              </label>
-              <input
-                type="number"
-                id={`${layer.name}LineWidthInput`}
-                value={layer.config.lineWidth}
-                onChange={(e) =>
-                  handleNumericChange(
-                    e,
-                    "lineWidth",
-                    layer.config,
-                    layer.setter
-                  )
-                }
-                min={visualisationLimits.min}
-                max={visualisationLimits.max}
-              />
-            </div>
+            <NumericInput property="radius" layer={layer} />
+            <NumericInput property="lineWidth" layer={layer} />
             <div className="LayerControl">
               <label htmlFor="retailStoresConfigAttributeInput">
                 {/* // : 'Revenue' ? 'Population'}`? */}
