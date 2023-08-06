@@ -3,7 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@deck.gl/aggregation-layers": "^8.9.23",
     "@deck.gl/carto": "^8.9.22",
+    "@deck.gl/core": "^8.9.23",
+    "@deck.gl/extensions": "^8.9.23",
+    "@deck.gl/geo-layers": "^8.9.23",
+    "@deck.gl/layers": "^8.9.23",
+    "@deck.gl/mesh-layers": "^8.9.23",
     "@deck.gl/react": "^8.9.22",
     "@types/node": "^16.18.39",
     "@types/react": "^18.2.18",
