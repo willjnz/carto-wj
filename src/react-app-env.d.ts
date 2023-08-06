@@ -12,11 +12,6 @@ export type TLayerConfigDispatch = React.Dispatch<
   React.SetStateAction<ILayerConfig>
 >;
 
-export interface IVisualisationLimits {
-  min: number;
-  max: number;
-}
-
 export interface ILayerMetadata {
   name: string;
   attr: string;

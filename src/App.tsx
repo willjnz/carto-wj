@@ -5,13 +5,10 @@ import Map from "./Map";
 import {
   ILayerConfig,
   ILayerMetadata,
-  IVisualisationLimits,
   TLayerConfigDispatch,
 } from "./react-app-env";
 
 function App() {
-  const visualisationLimits: IVisualisationLimits = { min: 1, max: 10000 };
-
   const [retailStoresConfig, setRetailStoresConfig] = useState<ILayerConfig>({
     fillColor: [141, 211, 199],
     lineColor: [0, 0, 0],
@@ -133,8 +130,6 @@ function App() {
           onChange={(e) =>
             handleNumericChange(e, property, layer.config, layer.setter)
           }
-          min={visualisationLimits.min}
-          max={visualisationLimits.max}
         />
       </div>
     );
@@ -185,7 +180,6 @@ function App() {
         <Map
           retailStoresConfig={retailStoresConfig}
           socioDemographicsConfig={socioDemographicsConfig}
-          visualisationLimits={visualisationLimits}
         />
       </div>
     </div>

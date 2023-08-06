@@ -8,7 +8,7 @@ import {
   MAP_TYPES,
 } from "@deck.gl/carto/typed";
 import "./Map.css";
-import { IVisualisationLimits, ILayerConfig } from "./react-app-env";
+import { ILayerConfig } from "./react-app-env";
 
 setDefaultCredentials({
   accessToken: process.env.REACT_APP_CARTO_accessToken,
@@ -18,10 +18,8 @@ setDefaultCredentials({
 function Map(props: {
   retailStoresConfig: ILayerConfig;
   socioDemographicsConfig: ILayerConfig;
-  visualisationLimits: IVisualisationLimits;
 }) {
-  const { retailStoresConfig, socioDemographicsConfig, visualisationLimits } =
-    props;
+  const { retailStoresConfig, socioDemographicsConfig } = props;
   const [popupInfo, setPopupInfo] = useState<any>(null);
   const initialViewState = {
     latitude: 42,
@@ -63,10 +61,6 @@ function Map(props: {
     }
   };
   const basicLayerConfig = {
-    radiusMinPixels: visualisationLimits.min,
-    radiusMaxPixels: visualisationLimits.max,
-    lineWidthMinPixels: visualisationLimits.min,
-    lineWidthMaxPixels: visualisationLimits.max,
     stroked: true,
     filled: true,
     pickable: true,
