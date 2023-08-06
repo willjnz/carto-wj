@@ -72,50 +72,49 @@ function Map(props: {
     pickable: true,
     onClick: handleFeatureClick,
   };
-  const retailStoresLayer = new CartoLayer({
+  const retailLayerConfig = {
     ...basicLayerConfig,
-    id: "retail_stores",
-    name: "retail_stores",
     type: MAP_TYPES.TABLE,
     connection: "carto_dw",
     source: "carto-demo-data.demo_tables.retail_stores",
     geoColumn: "geom",
-    getFillColor: retailStoresConfig.fillColor,
     getLineColor: retailStoresConfig.lineColor,
     getPointRadius: retailStoresConfig.radius,
     getLineWidth: retailStoresConfig.lineWidth,
-    visible: retailStoresConfig.styleByAttribute ? false : true,
-  });
-  const socioDemographicsLayer = new CartoLayer({
+  };
+  const socioDemographicsLayerConfig = {
     ...basicLayerConfig,
-    id: "sociodemographics_usa_blockgroup",
-    name: "sociodemographics_usa_blockgroup",
     type: MAP_TYPES.TILESET,
     connection: "carto_dw",
     data: "carto-demo-data.demo_tilesets.sociodemographics_usa_blockgroup",
-    getFillColor: socioDemographicsConfig.fillColor,
     getLineColor: socioDemographicsConfig.lineColor,
     getPointRadius: socioDemographicsConfig.radius,
     getLineWidth: socioDemographicsConfig.lineWidth,
+  };
+  const retailStoresLayer = new CartoLayer({
+    ...retailLayerConfig,
+    id: "retail_stores",
+    name: "retail_stores",
+    getFillColor: retailStoresConfig.fillColor,
+    visible: retailStoresConfig.styleByAttribute ? false : true,
+  });
+  const socioDemographicsLayer = new CartoLayer({
+    ...socioDemographicsLayerConfig,
+    id: "sociodemographics_usa_blockgroup",
+    name: "sociodemographics_usa_blockgroup",
+    getFillColor: socioDemographicsConfig.fillColor,
     visible: socioDemographicsConfig.styleByAttribute ? false : true,
   });
   const retailStoresRampedLayer = new CartoLayer({
-    ...basicLayerConfig,
+    ...retailLayerConfig,
     id: "retail_stores_ramped",
     name: "retail_stores_ramped",
-    type: MAP_TYPES.TABLE,
-    connection: "carto_dw",
-    source: "carto-demo-data.demo_tables.retail_stores",
-    geoColumn: "geom",
     getFillColor: (feature: any) => {
       const revenue = feature.properties.revenue;
       if (revenue > 1500000) return [255, 136, 0];
       else if (revenue > 1100000) return [255, 175, 85];
       else return [255, 215, 170];
     },
-    getLineColor: retailStoresConfig.lineColor,
-    getPointRadius: retailStoresConfig.radius,
-    getLineWidth: retailStoresConfig.lineWidth,
     updateTriggers: {
       getFillColor: [
         retailStoresConfig.styleByAttribute,
@@ -125,21 +124,15 @@ function Map(props: {
     visible: retailStoresConfig.styleByAttribute ? true : false,
   });
   const socioDemographicsRampedLayer = new CartoLayer({
-    ...basicLayerConfig,
+    ...socioDemographicsLayerConfig,
     id: "sociodemographics_usa_blockgroup_ramped",
     name: "sociodemographics_usa_blockgroup_ramped",
-    type: MAP_TYPES.TILESET,
-    connection: "carto_dw",
-    data: "carto-demo-data.demo_tilesets.sociodemographics_usa_blockgroup",
     getFillColor: (feature: any) => {
       const population = feature.properties.total_pop;
-      if (population > 2000) return [255, 136, 0];
-      else if (population > 1000) return [255, 175, 85];
-      else return [255, 215, 170];
+      if (population > 2000) return [3, 182, 252];
+      else if (population > 1000) return [96, 208, 252];
+      else return [168, 231, 255];
     },
-    getLineColor: socioDemographicsConfig.lineColor,
-    getPointRadius: socioDemographicsConfig.radius,
-    getLineWidth: socioDemographicsConfig.lineWidth,
     updateTriggers: {
       getFillColor: [
         socioDemographicsConfig.styleByAttribute,
@@ -149,10 +142,11 @@ function Map(props: {
     visible: socioDemographicsConfig.styleByAttribute ? true : false,
   });
   const layers = [
+    // order is important. first in array is rendered at bottom
     socioDemographicsLayer,
+    socioDemographicsRampedLayer,
     retailStoresLayer,
     retailStoresRampedLayer,
-    socioDemographicsRampedLayer,
   ];
 
   return (

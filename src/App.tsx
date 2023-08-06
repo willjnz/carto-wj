@@ -14,7 +14,7 @@ function App() {
   const [retailStoresConfig, setRetailStoresConfig] = useState<ILayerConfig>({
     fillColor: [141, 211, 199],
     lineColor: [0, 0, 0],
-    lineWidth: 2,
+    lineWidth: 200,
     radius: 1000,
     styleByAttribute: false,
   });
@@ -23,7 +23,7 @@ function App() {
       fillColor: [251, 128, 114],
       lineColor: [0, 0, 0],
       lineWidth: 500,
-      radius: 5,
+      radius: 1,
       styleByAttribute: false,
     });
 
@@ -65,14 +65,22 @@ function App() {
     {
       name: "Retail Stores",
       attr: "Revenue",
-      legendItems: [1500000, 1100000, 0],
+      legendItems: [
+        { color: "#ff8800", value: 1500000 },
+        { color: "#ffaf55", value: 1100000 },
+        { color: "#ffd7aa", value: 0 },
+      ],
       config: retailStoresConfig,
       setter: setRetailStoresConfig,
     },
     {
       name: "Sociodemographics USA Blockgroup",
       attr: "Population",
-      legendItems: [2000, 1000, 0],
+      legendItems: [
+        { color: "#03b6fc", value: 2000 },
+        { color: "#60d0fc", value: 1000 },
+        { color: "#a8e7ff", value: 0 },
+      ],
       config: socioDemographicsConfig,
       setter: setSocioDemographicsConfig,
     },
@@ -88,19 +96,17 @@ function App() {
     return result;
   };
 
-  function Legend(props: { items: number[] }): JSX.Element {
+  function Legend(props: { items: {color: string, value: number}[] }): JSX.Element {
     const { items } = props;
-    const colors = ["#ff8800", "#ffaf55", "#ffd7aa"];
     return (
       <div className="Legend">
         {items.map((li, i) => (
-          <div key={li} className="LegendItem">
+          <div key={li.color + li.value} className="LegendItem">
             <div
               className="LegendColor"
-              style={{ backgroundColor: colors[i] }}
+              style={{ backgroundColor: li.color }}
             ></div>
-            <p
-              className="LegendText">{li}</p>
+            <p className="LegendText">&gt;{li.value}</p>
           </div>
         ))}
       </div>
