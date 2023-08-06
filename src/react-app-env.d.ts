@@ -11,11 +11,3 @@ export interface ILayerConfig {
 export type TLayerConfigDispatch = React.Dispatch<
   React.SetStateAction<ILayerConfig>
 >;
-
-export interface ILayerMetadata {
-  name: string;
-  attr: string;
-  legendItems: { color: string; value: number }[];
-  config: ILayerConfig;
-  setter: TLayerConfigDispatch;
-}

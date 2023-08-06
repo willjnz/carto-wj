@@ -2,11 +2,7 @@ import React, { useState } from "react";
 import { RGBColor, ColorResult, TwitterPicker } from "react-color";
 import "./App.css";
 import Map from "./Map";
-import {
-  ILayerConfig,
-  ILayerMetadata,
-  TLayerConfigDispatch,
-} from "./react-app-env";
+import { ILayerConfig, TLayerConfigDispatch } from "./react-app-env";
 
 function App() {
   const [retailStoresConfig, setRetailStoresConfig] = useState<ILayerConfig>({
@@ -36,53 +32,10 @@ function App() {
     setter({ ...update, [property]: [rgb.r, rgb.g, rgb.b] });
   };
 
-  const handleNumericChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    property: string,
-    state: ILayerConfig,
-    setter: TLayerConfigDispatch
-  ) => {
-    const newValue = parseInt(event.target.value);
-    const update = structuredClone(state);
-    setter({ ...update, [property]: newValue });
-  };
-
   const convertDeckColorToRgb = (color: [number, number, number]): RGBColor => {
     return { r: color[0], g: color[1], b: color[2] };
   };
 
-  const handleCheckboxToggle = (
-    state: ILayerConfig,
-    setter: TLayerConfigDispatch
-  ) => {
-    const update = structuredClone(state);
-    setter({ ...update, styleByAttribute: !update.styleByAttribute });
-  };
-
-  const layers = [
-    {
-      name: "Retail Stores",
-      attr: "Revenue",
-      legendItems: [
-        { color: "#ff8800", value: 1500000 },
-        { color: "#ffaf55", value: 1100000 },
-        { color: "#ffd7aa", value: 0 },
-      ],
-      config: retailStoresConfig,
-      setter: setRetailStoresConfig,
-    },
-    {
-      name: "Sociodemographics USA Blockgroup",
-      attr: "Population",
-      legendItems: [
-        { color: "#03b6fc", value: 2000 },
-        { color: "#60d0fc", value: 1000 },
-        { color: "#a8e7ff", value: 0 },
-      ],
-      config: socioDemographicsConfig,
-      setter: setSocioDemographicsConfig,
-    },
-  ];
   const colorSettings = ["fillColor", "lineColor"];
   const camelCaseToTitleCase = (str: string): string => {
     // split the camelCase string into words
@@ -117,68 +70,158 @@ function App() {
     <div className="App">
       <div className="PanelLeft">
         <h1>Layers</h1>
-        {layers.map((layer) => (
-          <div key={JSON.stringify(layer.config)} className="LayerGroup">
-            <h3>{camelCaseToTitleCase(layer.name)}</h3>
-            {colorSettings.map((cs) => (
-              <div key={cs}>
-                <p>{camelCaseToTitleCase(cs)}</p>
-                <TwitterPicker
-                  className="LayerControl"
-                  // @ts-ignore
-                  color={convertDeckColorToRgb(layer.config[cs])}
-                  onChange={(e) =>
-                    handleColorChange(e, cs, layer.config, layer.setter)
-                  }
-                />
-              </div>
-            ))}
-            <div className="LayerControl">
-              <label htmlFor={`${layer.name}RadiusInput`}>Radius: </label>
-              <input
-                type="number"
-                id={`${layer.name}RadiusInput`}
-                value={layer.config.radius}
+        <div className="LayerGroup">
+          <h3>Retail Stores</h3>
+          {colorSettings.map((cs) => (
+            <div key={cs}>
+              <p>{camelCaseToTitleCase(cs)}</p>
+              <TwitterPicker
+                className="LayerControl"
+                // @ts-ignore
+                color={convertDeckColorToRgb(retailStoresConfig[cs])}
                 onChange={(e) =>
-                  setRetailStoresConfig({
-                    ...retailStoresConfig,
-                    radius: parseInt(e.target.value),
-                  })
+                  handleColorChange(
+                    e,
+                    cs,
+                    retailStoresConfig,
+                    setRetailStoresConfig
+                  )
                 }
               />
             </div>
-            <div className="LayerControl">
-              <label htmlFor={`${layer.name}LineWidthInput`}>Line Width: </label>
-              <input
-                type="number"
-                id={`${layer.name}LineWidthInput`}
-                value={layer.config.lineWidth}
-                onChange={(e) =>
-                  setRetailStoresConfig({
-                    ...retailStoresConfig,
-                    lineWidth: parseInt(e.target.value),
-                  })
-                }
-              />
-            </div>
-            <div className="LayerControl">
-              <label htmlFor="retailStoresConfigAttributeInput">
-                {/* // : 'Revenue' ? 'Population'}`? */}
-                Style by {layer.attr}:
-              </label>
-              <input
-                type="checkbox"
-                checked={layer.config.styleByAttribute}
-                onChange={() =>
-                  handleCheckboxToggle(layer.config, layer.setter)
-                }
-              />
-              {layer.config.styleByAttribute && (
-                <Legend items={layer.legendItems} />
-              )}
-            </div>
+          ))}
+          <div className="LayerControl">
+            <label htmlFor="retailStoresRadiusInput">Radius: </label>
+            <input
+              type="number"
+              id="retailStoresRadiusInput"
+              value={retailStoresConfig.radius}
+              onChange={(e) =>
+                setRetailStoresConfig({
+                  ...retailStoresConfig,
+                  radius: parseInt(e.target.value),
+                })
+              }
+            />
           </div>
-        ))}
+          <div className="LayerControl">
+            <label htmlFor="retailStoresRadiusInputLineWidthInput">
+              Line Width:{" "}
+            </label>
+            <input
+              type="number"
+              id="retailStoresRadiusInputLineWidthInput"
+              value={retailStoresConfig.lineWidth}
+              onChange={(e) =>
+                setRetailStoresConfig({
+                  ...retailStoresConfig,
+                  lineWidth: parseInt(e.target.value),
+                })
+              }
+            />
+          </div>
+          <div className="LayerControl">
+            <label htmlFor="retailStoresConfigAttributeInput">
+              Style by Revenue:
+            </label>
+            <input
+              id="retailStoresConfigAttributeInput"
+              type="checkbox"
+              checked={retailStoresConfig.styleByAttribute}
+              onChange={() => {
+                setRetailStoresConfig({
+                  ...retailStoresConfig,
+                  styleByAttribute: !retailStoresConfig.styleByAttribute,
+                });
+              }}
+            />
+            {retailStoresConfig.styleByAttribute && (
+              <Legend
+                items={[
+                  { color: "#ff8800", value: 1500000 },
+                  { color: "#ffaf55", value: 1100000 },
+                  { color: "#ffd7aa", value: 0 },
+                ]}
+              />
+            )}
+          </div>
+        </div>
+        <div className="LayerGroup">
+          <h3>Sociodemographics USA Blockgroup</h3>
+          {colorSettings.map((cs) => (
+            <div key={cs}>
+              <p>{camelCaseToTitleCase(cs)}</p>
+              <TwitterPicker
+                className="LayerControl"
+                // @ts-ignore
+                color={convertDeckColorToRgb(socioDemographicsConfig[cs])}
+                onChange={(e) =>
+                  handleColorChange(
+                    e,
+                    cs,
+                    socioDemographicsConfig,
+                    setSocioDemographicsConfig
+                  )
+                }
+              />
+            </div>
+          ))}
+          <div className="LayerControl">
+            <label htmlFor="socioDemographicsRadiusInput">Radius: </label>
+            <input
+              type="number"
+              id="socioDemographicsRadiusInput"
+              value={socioDemographicsConfig.radius}
+              onChange={(e) =>
+                setSocioDemographicsConfig({
+                  ...socioDemographicsConfig,
+                  radius: parseInt(e.target.value),
+                })
+              }
+            />
+          </div>
+          <div className="LayerControl">
+            <label htmlFor="socioDemographicsRadiusInputLineWidthInput">
+              Line Width:{" "}
+            </label>
+            <input
+              type="number"
+              id="socioDemographicsRadiusInputLineWidthInput"
+              value={socioDemographicsConfig.lineWidth}
+              onChange={(e) =>
+                setSocioDemographicsConfig({
+                  ...socioDemographicsConfig,
+                  lineWidth: parseInt(e.target.value),
+                })
+              }
+            />
+          </div>
+          <div className="LayerControl">
+            <label htmlFor="socioDemographicsConfigAttributeInput">
+              Style by Population:
+            </label>
+            <input
+              id="socioDemographicsConfigAttributeInput"
+              type="checkbox"
+              checked={socioDemographicsConfig.styleByAttribute}
+              onChange={() => {
+                setSocioDemographicsConfig({
+                  ...socioDemographicsConfig,
+                  styleByAttribute: !socioDemographicsConfig.styleByAttribute,
+                });
+              }}
+            />
+            {socioDemographicsConfig.styleByAttribute && (
+              <Legend
+                items={[
+                  { color: "#03b6fc", value: 2000 },
+                  { color: "#60d0fc", value: 1000 },
+                  { color: "#a8e7ff", value: 0 },
+                ]}
+              />
+            )}
+          </div>
+        </div>
       </div>
       <div className="PanelRight">
         <Map
