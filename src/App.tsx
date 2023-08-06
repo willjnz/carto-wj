@@ -113,28 +113,6 @@ function App() {
     );
   }
 
-  function NumericInput(props: {
-    property: string;
-    layer: ILayerMetadata;
-  }): JSX.Element {
-    const { property, layer } = props;
-    const name = `${layer.name}${property}Input`;
-    return (
-      <div className="LayerControl">
-        <label htmlFor={name}>{camelCaseToTitleCase(property)}: </label>
-        <input
-          type="number"
-          id={name}
-          // @ts-ignore
-          value={layer.config[property]}
-          onChange={(e) =>
-            handleNumericChange(e, property, layer.config, layer.setter)
-          }
-        />
-      </div>
-    );
-  }
-
   return (
     <div className="App">
       <div className="PanelLeft">
@@ -155,8 +133,34 @@ function App() {
                 />
               </div>
             ))}
-            <NumericInput property="radius" layer={layer} />
-            <NumericInput property="lineWidth" layer={layer} />
+            <div className="LayerControl">
+              <label htmlFor={`${layer.name}RadiusInput`}>Radius: </label>
+              <input
+                type="number"
+                id={`${layer.name}RadiusInput`}
+                value={layer.config.radius}
+                onChange={(e) =>
+                  setRetailStoresConfig({
+                    ...retailStoresConfig,
+                    radius: parseInt(e.target.value),
+                  })
+                }
+              />
+            </div>
+            <div className="LayerControl">
+              <label htmlFor={`${layer.name}LineWidthInput`}>Line Width: </label>
+              <input
+                type="number"
+                id={`${layer.name}LineWidthInput`}
+                value={layer.config.lineWidth}
+                onChange={(e) =>
+                  setRetailStoresConfig({
+                    ...retailStoresConfig,
+                    lineWidth: parseInt(e.target.value),
+                  })
+                }
+              />
+            </div>
             <div className="LayerControl">
               <label htmlFor="retailStoresConfigAttributeInput">
                 {/* // : 'Revenue' ? 'Population'}`? */}
