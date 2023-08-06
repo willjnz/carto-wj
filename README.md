@@ -30,6 +30,6 @@ The user can do the following:
 To run the application locally, complete the following steps:
 
   1. clone the repository
-  2. install with npm or yarn
+  2. run yarn install
   3. add an .env file to the root directory and add a REACT_APP_CARTO_accessToken and a REACT_APP_CARTO_apiBaseUrl to this file
-  4. run start with npm or yarn
+  4. run yarn start
